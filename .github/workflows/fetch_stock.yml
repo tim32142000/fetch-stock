@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install yfinance pandas
-      - run: python fetch_stock.py
+      - run: python fetch_stock_tsmc/fetch_stock_tsmc.py
       - run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
