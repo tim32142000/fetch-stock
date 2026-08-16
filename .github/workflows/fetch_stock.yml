@@ -24,3 +24,8 @@ jobs:
           git add stock-data/
           git commit -m "Update stock data" || echo "No changes"
           git push
+
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python notify_discord.py
