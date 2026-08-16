@@ -1,5 +1,5 @@
 """
-fetch_stock.py
+fetch_stock_tsmc.py
 
 自動抓取台積電（TSMC）股價資料，並存成 CSV。
 - 台股代號：2330.TW（台灣證交所掛牌）
@@ -17,7 +17,7 @@ import yfinance as yf
 
 # ------------------- 設定 -------------------
 TICKER = "2330.TW"          # 台積電（台股）
-DATA_DIR = "data"           # 資料存放資料夾
+DATA_DIR = "../stock_data"      # 資料存放資料夾
 PERIOD = "5d"                # 抓最近幾天的資料（也可用 "1mo", "1y" 等）
 INTERVAL = "1d"              # 資料頻率：1d = 日線
 
