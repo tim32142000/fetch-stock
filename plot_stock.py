@@ -29,7 +29,7 @@ matplotlib.use("Agg")  # 不需要顯示視窗，直接輸出成檔案（適合�
 
 # ------------------- 預設設定 -------------------
 DEFAULT_TICKER = "2330.TW"
-DATA_DIR = "stock_data"
+DATA_DIR = "stock-data"
 OUTPUT_DIR = "charts"
 
 
@@ -101,8 +101,12 @@ def main():
         df = df.tail(args.last_n).reset_index(drop=True)
         print(f"只顯示最近 {args.last_n} 筆資料")
 
+    last_date_str = df["Date"].iloc[-1].strftime("%Y%m%d")
+
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    output_path = os.path.join(OUTPUT_DIR, f"{args.ticker.replace('.', '_')}.png")
+    output_path = os.path.join(
+        OUTPUT_DIR, f"{args.ticker.replace('.', '_')}_{last_date_str}.png"
+    )
 
     fig = plot_price_chart(df, args.ticker)
     fig.savefig(output_path, dpi=150)
