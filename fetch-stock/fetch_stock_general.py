@@ -33,7 +33,7 @@ import yfinance as yf
 
 # ------------------- 預設設定 -------------------
 DEFAULT_TICKERS = ["2330.TW"]   # 沒有指定 --tickers 時，預設抓的股票清單
-DATA_DIR = "../stock_data"                # 資料存放資料夾
+DATA_DIR = "../stock-data"                # 資料存放資料夾
 DEFAULT_PERIOD = "5d"            # 抓最近幾天的資料（也可用 "1mo", "1y" 等）
 DEFAULT_INTERVAL = "1d"          # 資料頻率：1d = 日線
 
