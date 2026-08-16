@@ -17,7 +17,7 @@ import yfinance as yf
 
 # ------------------- 設定 -------------------
 TICKER = "2330.TW"          # 台積電（台股）
-DATA_DIR = "../stock-data"      # 資料存放資料夾
+DATA_DIR = "stock-data"      # 資料存放資料夾
 PERIOD = "5d"                # 抓最近幾天的資料（也可用 "1mo", "1y" 等）
 INTERVAL = "1d"              # 資料頻率：1d = 日線
 
@@ -51,8 +51,8 @@ def merge_with_existing(new_df: pd.DataFrame, filepath: str) -> pd.DataFrame:
 
 def add_basic_indicators(df: pd.DataFrame) -> pd.DataFrame:
     """加入簡單技術指標：漲跌幅、5 日均線（在合併、排序後的完整資料上重新計算，確保連續正確）"""
-    df["Change(%)"] = df["Close"].pct_change() * 100
-    df["MA5"] = df["Close"].rolling(window=5, min_periods=1).mean()
+    df["Change(%)"] = (df["Close"].pct_change() * 100).round(4)
+    df["MA5"] = df["Close"].rolling(window=5, min_periods=1).mean().round(4)
     return df
 
 

@@ -5,7 +5,7 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 13 * * 1-5'  # 週一到週五 UTC 13:00 (台灣時間 21:00)
+    - cron: '0 6 * * 1-5'  # 週一到週五 UTC 06:00 (台灣時間 14:00)
   workflow_dispatch:  # 也允許手動觸發,方便測試
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install yfinance pandas
-      - run: python fetch-stock/fetch_stock_tsmc.py
+      - run: python fetch_stock_tsmc.py
       - run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
