@@ -35,29 +35,45 @@ def fetch_stock_data(ticker: str, period: str, interval: str) -> pd.DataFrame:
     return df
 
 
+def merge_with_existing(new_df: pd.DataFrame, filepath: str) -> pd.DataFrame:
+    """把新抓到的資料和已存在的主檔案合併，並依日期去除重複"""
+    if os.path.exists(filepath):
+        old_df = pd.read_csv(filepath, parse_dates=["Date"])
+        combined = pd.concat([old_df, new_df], ignore_index=True)
+    else:
+        combined = new_df
+
+    # 依日期去重複：同一天若抓到多次，保留最新抓到的那一筆
+    combined = combined.drop_duplicates(subset=["Date"], keep="last")
+    combined = combined.sort_values("Date").reset_index(drop=True)
+    return combined
+
+
 def add_basic_indicators(df: pd.DataFrame) -> pd.DataFrame:
-    """加入簡單技術指標：漲跌幅、5 日均線"""
+    """加入簡單技術指標：漲跌幅、5 日均線（在合併、排序後的完整資料上重新計算，確保連續正確）"""
     df["Change(%)"] = df["Close"].pct_change() * 100
     df["MA5"] = df["Close"].rolling(window=5, min_periods=1).mean()
     return df
 
 
 def save_to_csv(df: pd.DataFrame, ticker: str) -> str:
-    """把資料存成 CSV，檔名帶日期，方便每天累積歷史紀錄"""
+    """把資料存成單一主檔案（檔名不帶日期），每次執行覆蓋更新"""
     os.makedirs(DATA_DIR, exist_ok=True)
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    filename = os.path.join(DATA_DIR, f"{ticker.replace('.', '_')}_{today_str}.csv")
+    filename = os.path.join(DATA_DIR, f"{ticker.replace('.', '_')}.csv")
     df.to_csv(filename, index=False, encoding="utf-8-sig")
     return filename
 
 
 def main():
     print(f"開始抓取 {TICKER} 的股價資料...")
-    df = fetch_stock_data(TICKER, PERIOD, INTERVAL)
-    df = add_basic_indicators(df)
+    raw_df = fetch_stock_data(TICKER, PERIOD, INTERVAL)
 
-    filepath = save_to_csv(df, TICKER)
-    print(f"已儲存至：{filepath}")
+    filepath = os.path.join(DATA_DIR, f"{TICKER.replace('.', '_')}.csv")
+    merged_df = merge_with_existing(raw_df, filepath)
+    df = add_basic_indicators(merged_df)
+
+    saved_path = save_to_csv(df, TICKER)
+    print(f"已更新主檔案：{saved_path}（目前共 {len(df)} 筆資料）")
 
     # 印出最新一筆資料摘要
     latest = df.iloc[-1]
