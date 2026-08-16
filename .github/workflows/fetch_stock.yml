@@ -1,4 +1,8 @@
 name: Fetch Stock Data
+
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: '0 13 * * 1-5'  # 週一到週五 UTC 13:00 (台灣時間 21:00)
