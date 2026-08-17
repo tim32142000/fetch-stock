@@ -13,6 +13,7 @@ notify_discord.py
 
 需要先設定環境變數：
     DISCORD_WEBHOOK_URL
+    本地端使用dotenv
 """
 
 import argparse
@@ -20,6 +21,7 @@ import os
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 
 DATA_DIR = "stock-data"
 DEFAULT_TICKER = os.environ.get("TICKER", "2330.TW")  # 優先讀環境變數 TICKER，沒設定才 fallback 用預設值
@@ -87,6 +89,26 @@ def send_to_discord(message: str) -> None:
     response.raise_for_status()
 
 
+def send_to_line(message: str) -> None:
+    user_id = os.environ.get("LINE_USER_ID")
+    token = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")
+    if not user_id or not token:
+        raise EnvironmentError("環境變數 LINE_USER_ID 或 LINE_CHANNEL_ACCESS_TOKEN 未設定")
+
+    url = "https://api.line.me/v2/bot/message/push"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "to": user_id,
+        "messages": [{"type": "text", "text": message}],
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
+
+
 def main():
     args = parse_args()
 
@@ -99,6 +121,9 @@ def main():
 
     send_to_discord(message)
     print("Discord 通知已送出")
+
+    send_to_line(message)
+    print("LINE 通知已送出")
 
 
 if __name__ == "__main__":
