@@ -23,6 +23,9 @@ import pandas as pd
 import requests
 from dotenv import load_dotenv
 
+# 載入專案根目錄下的 .env 檔案
+load_dotenv() 
+
 DATA_DIR = "stock-data"
 DEFAULT_TICKER = os.environ.get("TICKER", "2330.TW")  # 優先讀環境變數 TICKER，沒設定才 fallback 用預設值
 

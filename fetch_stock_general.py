@@ -1,21 +1,21 @@
 """
-fetch_stock_genarl.py
+fetch_stock_general.py
 
 自動抓取指定股票的股價資料，並合併更新到各自的主檔案（CSV）。
 
 用法範例：
     # 用預設股票清單（台積電）
-    python fetch_stock_genarl.py
+    python fetch_stock_general.py
 
     # 指定單一股票
-    python fetch_stock_genarl.py --tickers 2330.TW
+    python fetch_stock_general.py --tickers 2330.TW
 
     # 指定多支股票（用逗號分隔，不要有空格，或用空格分隔多個參數皆可）
-    python fetch_stock_genarl.py --tickers 2330.TW,2317.TW,AAPL
-    python fetch_stock_genarl.py --tickers 2330.TW 2317.TW AAPL
+    python fetch_stock_general.py --tickers 2330.TW,2317.TW,AAPL
+    python fetch_stock_general.py --tickers 2330.TW 2317.TW AAPL
 
     # 調整抓取天數區間
-    python fetch_stock_genarl.py --tickers 2330.TW --period 1mo
+    python fetch_stock_general.py --tickers 2330.TW --period 1mo
 
 代號參考：
     - 台股：代號後面加 .TW（例如台積電 2330.TW、鴻海 2317.TW）
