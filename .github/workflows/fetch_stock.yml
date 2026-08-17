@@ -28,4 +28,4 @@ jobs:
       - name: Send Discord notification
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python notify/notify_discord.py
+        run: python notify/notify.py
