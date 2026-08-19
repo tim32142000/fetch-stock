@@ -1,18 +1,20 @@
 """
-notify_discord.py
+notify.py
 
 讀取 fetch_stock.py 產生的股價主檔案（CSV），取出最新一天的真實資料，
-組成訊息文字，推送到 Discord 頻道。
+組成訊息文字，推送到 Discord 和 LINE。
 
 用法範例：
-    python notify_discord.py
-    python notify_discord.py --ticker 2330.TW
+    python notify.py
+    python notify.py --ticker 2330.TW
 
 需要先安裝套件：
     pip install pandas requests
 
 需要先設定環境變數：
     DISCORD_WEBHOOK_URL
+    LINE_CHANNEL_ACCESS_TOKEN
+    LINE_USER_ID
     本地端使用dotenv
 """
 
