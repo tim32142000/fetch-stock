@@ -8,7 +8,8 @@
 -  **增量合併**：每次執行會與既有 CSV 合併、依日期去除重複，只保留最新一筆
 -  **基本技術指標**：自動計算漲跌幅（`Change(%)`）與 5 日均線（`MA5`）
 -  **走勢圖輸出**：讀取 CSV 畫出收盤價 + 5 日均線圖，下方附漲跌幅長條圖，輸出成 PNG
--  **可排程自動化**：搭配 `.github/workflows` 可在 GitHub Actions 上定期自動抓取
+-  **推播通知**：讀取最新股價資料，透過 Discord Webhook 與 LINE Messaging API 推播更新通知
+-  **可排程自動化**：搭配 `.github/workflows` 可在 GitHub Actions 上定期自動抓取及通知
 
 ## 專案結構
 
@@ -18,6 +19,8 @@ fetch-stock/
 ├── fetch_stock_tsmc.py      # 台積電 (2330.TW) 專用抓取腳本
 ├── plot_stock.py            # 讀取 CSV 並畫出股價走勢圖
 ├── stock-data/               # 抓取結果存放處（每支股票一個 CSV）
+├── notify/                  # 股價通知相關腳本
+│   └── notify.py            # 讀取最新股價，推播通知到 Discord 與 LINE
 ├── charts/                   # 產生的走勢圖 PNG
 ├── prompt/                   # 詢問 AI 意見的 prompt 建議
 └── .github/workflows/        # GitHub Actions 自動排程設定
@@ -80,6 +83,13 @@ python plot_stock.py --ticker 2330.TW --last-n 30
 ```
 
 圖表會輸出到 `charts/<代號>_<日期>.png`。
+
+### 3. 發送通知
+```bash
+python notify/notify.py
+```
+
+會讀取 `stock-data/` 底下最新的股價資料，透過 Discord Webhook 與 LINE Messaging API 推播更新通知。執行前請先設定好對應的金鑰／Webhook URL（建議透過環境變數或 GitHub Actions Secrets 管理，不要直接寫死在程式碼裡）。
 
 ## 自動化排程
 
