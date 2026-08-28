@@ -22,7 +22,6 @@ fetch-stock/
 ├── notify/                  # 股價通知相關腳本
 │   └── notify.py            # 讀取最新股價，推播通知到 Discord 與 LINE
 ├── charts/                   # 產生的走勢圖 PNG
-├── prompt/                   # 詢問 AI 意見的 prompt 建議
 └── .github/workflows/        # GitHub Actions 自動排程設定
 ```
 
