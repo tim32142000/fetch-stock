@@ -5,7 +5,8 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 7 * * 1-5'  # 週一到週五 UTC 07:00 (台灣時間 15:00)
+    - cron: '0 14 * * 1-5'  # 週一到週五 14:00
+      timezone: "Asia/Taipei" # 台灣時間
   workflow_dispatch:  # 也允許手動觸發,方便測試
 
 jobs:
