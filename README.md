@@ -92,5 +92,5 @@ python notify/notify.py
 
 ## 自動化排程
 
-`.github/workflows` 中設有 GitHub Actions 設定，可依排程自動執行抓取（及/或繪圖）腳本，並將更新後的資料提交回儲存庫，不需手動執行。
+`.github/workflows` 中設有 GitHub Actions 設定，可依排程自動執行抓取腳本，並將更新後的資料提交回儲存庫，不需手動執行。
 
