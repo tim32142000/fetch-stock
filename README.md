@@ -1,6 +1,6 @@
 # fetch-stock
 
-自動抓取股票歷史股價資料、計算基本技術指標，並繪製走勢圖的小工具。使用 [yfinance](https://pypi.org/project/yfinance/) 取得資料、`pandas` 處理與合併資料、`matplotlib` 輸出圖表，可搭配 GitHub Actions 定期排程執行，適合作為股價追蹤。
+自動抓取股票歷史股價資料、計算基本技術指標，並繪製走勢圖的小工具。使用 `yfinance` 取得資料、`pandas` 處理與合併資料、`matplotlib` 輸出圖表，搭配 GitHub Actions 定期排程執行，適合作為股價追蹤。
 
 ## 功能特色
 
