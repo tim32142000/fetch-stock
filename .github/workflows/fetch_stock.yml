@@ -20,8 +20,12 @@ jobs:
 
       - name: Show time
         run: |
+          echo "Local time:"
           date
+          echo "UTC time:"
           date -u
+          echo "GitHub event time:"
+          echo "$GITHUB_EVENT_NAME"
       
       - run: pip install yfinance pandas requests
       - run: python fetch_stock_tsmc.py
