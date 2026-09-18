@@ -36,6 +36,7 @@ DEFAULT_TICKERS = ["2330.TW"]   # 沒有指定 --tickers 時，預設抓的股�
 DATA_DIR = "stock-data"                # 資料存放資料夾
 DEFAULT_PERIOD = "5d"            # 抓最近幾天的資料（也可用 "1mo", "1y" 等）
 DEFAULT_INTERVAL = "1d"          # 資料頻率：1d = 日線
+OHLC_COLUMNS = ["Open", "High", "Low", "Close"]
 
 
 def parse_args() -> argparse.Namespace:
@@ -75,12 +76,17 @@ def parse_args() -> argparse.Namespace:
 def fetch_stock_data(ticker: str, period: str, interval: str) -> pd.DataFrame:
     """抓取指定股票的歷史價格資料"""
     stock = yf.Ticker(ticker)
-    df = stock.history(period=period, interval=interval)
+    # 保留交易所公布的實際 OHLC；若使用預設的自動還原，除息後的歷史價格
+    # 會乘上調整係數，產生不符合實際報價精度的長小數。
+    df = stock.history(period=period, interval=interval, auto_adjust=False)
 
     if df.empty:
         raise ValueError(f"沒有抓到 {ticker} 的資料，請確認代號是否正確或市場是否開盤")
 
     df = df.reset_index()
+    # auto_adjust=False 可能額外回傳 Adj Close；維持既有 CSV 欄位結構。
+    df = df.drop(columns=["Adj Close"], errors="ignore")
+    df[OHLC_COLUMNS] = df[OHLC_COLUMNS].round(2)
     df["Ticker"] = ticker
     return df
 
