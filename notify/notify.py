@@ -20,6 +20,7 @@ notify.py
 
 import argparse
 import os
+import uuid
 
 import pandas as pd
 import requests
@@ -29,12 +30,14 @@ try:
     from dotenv import load_dotenv, find_dotenv
 
     # 載入專案根目錄下的 .env 檔案
-    load_dotenv(find_dotenv()) 
+    load_dotenv(find_dotenv())
 except:
     pass
 
 DATA_DIR = "stock-data"
-DEFAULT_TICKER = os.environ.get("TICKER", "2330.TW")  # 優先讀環境變數 TICKER，沒設定才 fallback 用預設值
+DEFAULT_TICKER = os.environ.get(
+    "TICKER", "2330.TW"
+)  # 優先讀環境變數 TICKER，沒設定才 fallback 用預設值
 
 
 def parse_args() -> argparse.Namespace:
@@ -65,7 +68,7 @@ def load_latest_record(ticker: str) -> pd.Series:
 
 
 def build_message(ticker: str, record: pd.Series) -> str:
-    """把最新一天的真實資料組成 Discord 訊息文字"""
+    """把最新一天的真實資料組成訊息文字"""
     date_str = record["Date"].strftime("%Y-%m-%d")
     close_price = record["Close"]
     change_pct = record.get("Change(%)")
@@ -99,23 +102,25 @@ def send_to_discord(message: str) -> None:
     response.raise_for_status()
 
 
-def send_to_line(message: str) -> None:
+def send_to_line(message: str, timeout: int = 20) -> None:
     user_id = os.environ.get("LINE_USER_ID")
     token = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")
     if not user_id or not token:
-        raise EnvironmentError("環境變數 LINE_USER_ID 或 LINE_CHANNEL_ACCESS_TOKEN 未設定")
+        raise EnvironmentError(
+            "環境變數 LINE_USER_ID 或 LINE_CHANNEL_ACCESS_TOKEN 未設定"
+        )
 
-    url = "https://api.line.me/v2/bot/message/push"
+    broadcast_url = "https://api.line.me/v2/bot/message/broadcast"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
+        "X-Line-Retry-Key": str(uuid.uuid4()),
     }
-    payload = {
-        "to": user_id,
-        "messages": [{"type": "text", "text": message}],
-    }
+    payload = {"messages": [{"type": "text", "text": message}]}
 
-    response = requests.post(url, headers=headers, json=payload)
+    response = requests.post(
+        broadcast_url, headers=headers, json=payload, timeout=timeout
+    )
     response.raise_for_status()
 
 
