@@ -30,7 +30,7 @@ fetch-stock/
 ```bash
 git clone https://github.com/tim32142000/fetch-stock.git
 cd fetch-stock
-pip install yfinance pandas matplotlib requests
+pip install -r requirements.txt
 ```
 
 ## 使用方式

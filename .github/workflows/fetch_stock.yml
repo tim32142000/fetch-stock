@@ -27,7 +27,7 @@ jobs:
           echo "GitHub event time:"
           echo "$GITHUB_EVENT_NAME"
       
-      - run: pip install yfinance pandas requests
+      - run: pip install -r requirements
       - run: python fetch_stock_tsmc.py
       - run: |
           git config user.name "github-actions"
